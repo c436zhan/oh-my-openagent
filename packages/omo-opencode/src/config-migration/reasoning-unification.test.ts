@@ -84,7 +84,7 @@ describe("2026-08 reasoning unification migration", () => {
     }
   })
 
-  test("#given opencode agent and category fallback_models #when migrated #then category fallback becomes models", () => {
+  test("#given opencode agent and category fallback_models #when migrated #then agent fallback stays and category fallback becomes models", () => {
     // given
     const originalHome = process.env.HOME
     const originalConfigDir = process.env.OPENCODE_CONFIG_DIR
@@ -136,7 +136,8 @@ describe("2026-08 reasoning unification migration", () => {
         "[opencode]": {
           agents: {
             oracle: {
-              models: ["openai/gpt-5.6-sol", "openai/gpt-5.6-terra"],
+              model: "openai/gpt-5.6-sol",
+              fallback_models: ["openai/gpt-5.6-terra"],
             },
           },
           categories: {

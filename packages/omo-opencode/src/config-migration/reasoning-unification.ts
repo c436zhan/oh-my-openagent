@@ -84,7 +84,9 @@ function normalizeDefinition(
   if (Array.isArray(normalized["models"])) normalized["models"] = normalizedList(normalized["models"])
 
   const fallbackModels = value["fallback_models"]
-  const shouldCombine = fallbackModels !== undefined || (kind === "agent" && value["model"] !== undefined && value["models"] !== undefined)
+  const shouldCombine =
+    (fallbackModels !== undefined && (!opencode || kind === "category")) ||
+    (kind === "agent" && value["model"] !== undefined && value["models"] !== undefined)
   if (!shouldCombine) return normalized
 
   const primary = primaryModelRef(value, opencode)
