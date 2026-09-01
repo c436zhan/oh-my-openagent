@@ -1,1 +1,1 @@
-/tmp/omo-doctor-qa.rhYy1T
+isolated-temp-home=<tmp>/omo-doctor-qa.rhYy1T
