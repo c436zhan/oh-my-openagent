@@ -68,8 +68,8 @@ describe("deprecated fallback_models key check", () => {
     }
   })
 
-  it("reports typed harness agent fallback_models while ignoring opencode agent fallback_models", async () => {
-    //#given opencode and typed harness agent fallback model overrides
+  it("reports opencode category fallback_models while ignoring opencode agent fallback_models", async () => {
+    //#given opencode agent, opencode category, and typed harness agent fallback model overrides
     const originalConfigDir = process.env.OPENCODE_CONFIG_DIR
     const originalHome = process.env.HOME
     const originalCwd = process.cwd()
@@ -89,6 +89,11 @@ describe("deprecated fallback_models key check", () => {
             "[opencode]": {
               agents: {
                 oracle: {
+                  fallback_models: ["openai/gpt-5.6-terra"],
+                },
+              },
+              categories: {
+                deep: {
                   fallback_models: ["openai/gpt-5.6-terra"],
                 },
               },
@@ -112,9 +117,10 @@ describe("deprecated fallback_models key check", () => {
       const { checkDeprecatedReasoningKeys } = await import("./deprecated-reasoning-keys")
       const result = await checkDeprecatedReasoningKeys()
 
-      //#then only the typed harness agent fallback_models key is reported
+      //#then opencode category and typed harness agent fallback_models keys are reported
       expect(result.status).toBe("warn")
       expect(result.issues.map((issue) => issue.description)).toEqual([
+        `${configPath}: [opencode].categories.deep.fallback_models`,
         `${configPath}: [senpi].agents.oracle.fallback_models`,
       ])
     } finally {

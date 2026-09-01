@@ -66,6 +66,8 @@ describe("deprecated reasoning keys check", () => {
       expect(result.issues.map((issue) => issue.description)).toEqual([
         `${configPath}: categories.deep.variant`,
         `${configPath}: agents.oracle.reasoningEffort`,
+        `${configPath}: [opencode].agents.sisyphus.thinking`,
+        `${configPath}: [opencode].agents.sisyphus.textVerbosity`,
       ])
     } finally {
       process.chdir(originalCwd)
@@ -83,7 +85,7 @@ describe("deprecated reasoning keys check", () => {
     }
   })
 
-  it("ignores plugin-supported reasoning keys inside opencode harness blocks", async () => {
+  it("reports deprecated reasoning keys inside opencode harness blocks", async () => {
     //#given canonical base config plus plugin-specific opencode tuning
     const originalConfigDir = process.env.OPENCODE_CONFIG_DIR
     const originalHome = process.env.HOME
@@ -136,9 +138,10 @@ describe("deprecated reasoning keys check", () => {
       const { checkDeprecatedReasoningKeys } = await import("./deprecated-reasoning-keys")
       const result = await checkDeprecatedReasoningKeys()
 
-      //#then opencode agent keys are ignored while typed harness leftovers are reported
+      //#then opencode reasoning keys and typed harness leftovers are reported
       expect(result.status).toBe("warn")
       expect(result.issues.map((issue) => issue.description)).toEqual([
+        `${configPath}: [opencode].agents.explore.variant`,
         `${configPath}: [senpi].agents.explore.fallback_models`,
         `${configPath}: [codex].categories.deep.fallback_models`,
       ])

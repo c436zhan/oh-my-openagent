@@ -84,7 +84,7 @@ describe("2026-08 reasoning unification migration", () => {
     }
   })
 
-  test("#given legacy opencode agent fallback_models #when migrated #then startup validation reports no unknown keys", () => {
+  test("#given opencode agent and category fallback_models #when migrated #then category fallback becomes models", () => {
     // given
     const originalHome = process.env.HOME
     const originalConfigDir = process.env.OPENCODE_CONFIG_DIR
@@ -97,7 +97,13 @@ describe("2026-08 reasoning unification migration", () => {
     writeFileSync(targetPath, JSON.stringify({
       "[opencode]": {
         agents: {
-          sisyphus: {
+          oracle: {
+            model: "openai/gpt-5.6-sol",
+            fallback_models: ["openai/gpt-5.6-terra"],
+          },
+        },
+        categories: {
+          deep: {
             model: "openai/gpt-5.6-sol",
             fallback_models: ["openai/gpt-5.6-terra"],
           },
@@ -121,10 +127,25 @@ describe("2026-08 reasoning unification migration", () => {
 
       // when
       const migrated = executeLegacyConfigMigrationPlan(plan, { env: { HOME: homeDir } })
+      const document = JSON.parse(readFileSync(targetPath, "utf-8")) as Record<string, unknown>
       const validation = validatePluginConfig(projectDir)
 
       // then
       expect(migrated.status).toBe("migrated")
+      expect(document).toMatchObject({
+        "[opencode]": {
+          agents: {
+            oracle: {
+              models: ["openai/gpt-5.6-sol", "openai/gpt-5.6-terra"],
+            },
+          },
+          categories: {
+            deep: {
+              models: ["openai/gpt-5.6-sol", "openai/gpt-5.6-terra"],
+            },
+          },
+        },
+      })
       expect(validation.valid).toBe(true)
       expect(validation.messages).toEqual([])
     } finally {

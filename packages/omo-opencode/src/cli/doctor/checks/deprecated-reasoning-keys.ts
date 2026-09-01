@@ -84,7 +84,6 @@ function collectIssues(configPath: string, value: unknown, prefix: string): Doct
       }
       continue
     }
-    if (key === "[opencode]") continue
     if (TUNING_CONTAINERS.has(key) || isHarnessBlock(key) || prefix.length > 0) {
       issues.push(...collectIssues(configPath, child, path))
     }
