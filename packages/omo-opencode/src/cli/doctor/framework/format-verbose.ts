@@ -24,8 +24,9 @@ function formatIssueCountSummary(issues: readonly DoctorIssue[]): string | undef
 
 function formatCheckSummary(result: DoctorResult, issues: readonly DoctorIssue[]): string[] {
   const { summary } = result
+  const skippedText = summary.skipped > 0 ? `, ${summary.skipped} skipped` : ""
   const lines = [
-    `  ${passedChecks(summary.passed)}, ${summary.failed} failed, ${summary.warnings} with warnings`,
+    `  ${passedChecks(summary.passed)}, ${summary.failed} failed, ${summary.warnings} with warnings${skippedText}`,
   ]
   const issueSummary = formatIssueCountSummary(issues)
   if (issueSummary !== undefined) lines.push(`  ${issueSummary}`)
@@ -162,7 +163,8 @@ export function formatVerbose(result: DoctorResult): string {
   const passText = summary.passed > 0 ? color.green(passedChecks(summary.passed)) : passedChecks(summary.passed)
   const failText = summary.failed > 0 ? color.red(`${summary.failed} failed`) : `${summary.failed} failed`
   const warnText = summary.warnings > 0 ? color.yellow(`${summary.warnings} with warnings`) : `${summary.warnings} with warnings`
-  lines.push(`  ${passText}, ${failText}, ${warnText}`)
+  const skipText = summary.skipped > 0 ? `, ${summary.skipped} skipped` : ""
+  lines.push(`  ${passText}, ${failText}, ${warnText}${skipText}`)
   const issueSummary = formatIssueCountSummary(allIssues)
   if (issueSummary !== undefined) lines.push(`  ${issueSummary}`)
   lines.push(`  ${color.dim(`Total: ${summary.total} checks in ${summary.duration}ms`)}`)

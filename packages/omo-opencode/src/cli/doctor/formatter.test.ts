@@ -193,6 +193,8 @@ describe("formatDoctorOutput", () => {
     it("shows check summary counts", async () => {
       //#given
       const result = createDoctorResult()
+      result.summary.total = 3
+      result.summary.skipped = 1
       const { formatDoctorOutput } = await import(`./framework/formatter?verbose-summary-${Date.now()}`)
 
       //#when
@@ -202,6 +204,7 @@ describe("formatDoctorOutput", () => {
       expect(output).toContain("1 check passed")
       expect(output).toContain("0 failed")
       expect(output).toContain("1 with warnings")
+      expect(output).toContain("1 skipped")
     })
 
     it("distinguishes warning checks from issue counts when they differ", async () => {
@@ -222,14 +225,14 @@ describe("formatDoctorOutput", () => {
           { title: "GitHub CLI missing", description: "gh not found", severity: "error" },
         ] },
       ]
-      result.summary = { total: 3, passed: 1, failed: 0, warnings: 2, skipped: 0, duration: 15 }
+      result.summary = { total: 4, passed: 1, failed: 0, warnings: 2, skipped: 1, duration: 15 }
       const { formatDoctorOutput } = await import(`./framework/formatter?verbose-issue-counts-${Date.now()}`)
 
       //#when
       const output = stripAnsi(formatDoctorOutput(result, "verbose"))
 
       //#then
-      expect(output).toContain("1 check passed, 0 failed, 2 with warnings")
+      expect(output).toContain("1 check passed, 0 failed, 2 with warnings, 1 skipped")
       expect(output).toContain("8 issues found (7 warnings, 1 error)")
     })
 
