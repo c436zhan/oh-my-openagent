@@ -119,10 +119,12 @@ describe("deprecated fallback_models key check", () => {
 
       //#then opencode category and typed harness agent fallback_models keys are reported
       expect(result.status).toBe("warn")
-      expect(result.issues.map((issue) => issue.description)).toEqual([
+      const descriptions = result.issues.map((issue) => issue.description)
+      expect(descriptions).toEqual([
         `${configPath}: [opencode].categories.deep.fallback_models`,
         `${configPath}: [senpi].agents.oracle.fallback_models`,
       ])
+      expect(descriptions).not.toContain(`${configPath}: [opencode].agents.oracle.fallback_models`)
     } finally {
       process.chdir(originalCwd)
       rmSync(testRootDir, { recursive: true, force: true })
@@ -139,7 +141,7 @@ describe("deprecated fallback_models key check", () => {
     }
   })
 
-  it("exports no fallback_models replacement rule for OpenCode agent schema keys", async () => {
+  it("exports fallback_models replacement metadata while schemas still accept legacy keys", async () => {
     //#given the doctor replacement table and the matching config schemas
     const [doctorKeys, schemas] = await Promise.all([
       import("./deprecated-reasoning-keys"),
