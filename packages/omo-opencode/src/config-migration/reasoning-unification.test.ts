@@ -99,6 +99,7 @@ describe("2026-08 reasoning unification migration", () => {
         agents: {
           oracle: {
             model: "openai/gpt-5.6-sol",
+            models: ["openai/gpt-5.6-luna"],
             fallback_models: ["openai/gpt-5.6-terra"],
           },
         },
@@ -137,6 +138,7 @@ describe("2026-08 reasoning unification migration", () => {
           agents: {
             oracle: {
               model: "openai/gpt-5.6-sol",
+              models: ["openai/gpt-5.6-luna"],
               fallback_models: ["openai/gpt-5.6-terra"],
             },
           },
