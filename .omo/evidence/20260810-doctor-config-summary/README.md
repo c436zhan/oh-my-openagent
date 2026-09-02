@@ -17,7 +17,7 @@
 - Build: passed.
 - LSP diagnostics were attempted after the TypeScript edits, but the shared LSP daemon socket did not become reachable; `bun run typecheck` is the type-system verification for this run.
 - `doctor-verbose.txt` shows `[opencode].agents.oracle.fallback_models` is not reported as a deprecated config key, while `categories.deep.fallback_models` is still reported with migration guidance for converting it into a full `models` chain.
-- `doctor-verbose.txt` summary separates check counts from issue counts: `2 checks passed, 1 failed, 3 with warnings` and `4 issues found (3 warnings, 1 error)`.
+- `doctor-verbose.txt` summary separates check counts from issue counts: `2 checks passed, 1 failed, 3 with warnings, 2 skipped` and `4 issues found (3 warnings, 1 error)`.
 - `config-migrate.json` shows current `dev` migration emits `[opencode].agents.sisyphus.models`.
 - `post-migrate-doctor.json` shows the migrated config passes the Configuration check and the deprecated-key check reports `No deprecated config keys found`.
 

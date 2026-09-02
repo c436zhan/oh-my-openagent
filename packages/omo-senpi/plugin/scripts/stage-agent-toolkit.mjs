@@ -241,10 +241,16 @@ function isErrno(error, code) {
 if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
     if (process.argv.includes("--check")) {
-      // Fresh-checkout-safe: the agent-toolkit target is a gitignored staged runtime. If the source
-      // bundle or target has not been generated locally, CI covers staging in the Senpi build job.
-      if (!(await fileExists(defaultSourceEntry)) || !(await fileExists(defaultTargetDir))) {
+      // Fresh-checkout-safe: the agent-toolkit source and target are generated together by the Senpi
+      // build. A totally unstaged checkout can skip; a partial source/target state must fail below.
+      const sourceExists = await fileExists(defaultSourceEntry)
+      const targetExists = await fileExists(defaultTargetDir)
+      if (!sourceExists && !targetExists) {
         console.log(`agent-toolkit runtime not staged locally; skipping freshness check: ${defaultTargetDir}`)
+      } else if (!sourceExists) {
+        throw new Error(`Senpi aggregate ulw-loop bundle is missing: ${defaultSourceEntry}`)
+      } else if (!targetExists) {
+        throw new Error(`Senpi agent-toolkit runtime is missing: ${defaultTargetDir}`)
       } else {
         const result = await checkAgentToolkitFresh()
         console.log(`Senpi agent-toolkit runtime is current: ${result.targetDir} sha256=${result.sha256}`)
