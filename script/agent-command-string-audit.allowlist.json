@@ -7,6 +7,7 @@
     "packages/omo-codex/plugin/components/ulw-loop/src/steering.ts: omo ulw-loop",
     "packages/omo-codex/plugin/components/ulw-loop/test/codex-hook.test.ts: omo ulw-loop",
     "packages/omo-codex/plugin/components/ulw-loop/test/steering.test.ts: omo ulw-loop",
+    "packages/omo-senpi/plugin/runtime/agent-toolkit/ulw-loop/cli.js: omo ulw-loop x2",
     "packages/omo-codex/scripts/install-config.test.mjs: omo install",
     "packages/omo-codex/scripts/install-delegated-command.test.mjs: omo doctor",
     "packages/omo-codex/scripts/install-local-entrypoint.test.mjs: omo doctor",
