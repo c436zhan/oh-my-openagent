@@ -120,6 +120,6 @@ Issues
 
 Summary
 ────────────────────────────────────────
-  2 checks passed, 1 failed, 3 with warnings
+  2 checks passed, 1 failed, 3 with warnings, 2 skipped
   4 issues found (3 warnings, 1 error)
   Total: 8 checks in 896ms
