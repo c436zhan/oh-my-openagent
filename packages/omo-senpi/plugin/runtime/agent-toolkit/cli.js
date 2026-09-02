@@ -7,7 +7,7 @@ const [requestedComponent, ...requestedArgs] = process.argv.slice(2)
 const forwardsHelp = requestedComponent === undefined || requestedComponent === "help" || requestedComponent === "--help" || requestedComponent === "-h"
 const component = forwardsHelp ? "ulw-loop" : requestedComponent
 const args = forwardsHelp ? ["help"] : requestedArgs
-const entry = components[component]
+const entry = Object.hasOwn(components, component) ? components[component] : undefined
 if (entry === undefined) {
   console.error(`Unknown component: ${component ?? "(missing)"}. Available components: ulw-loop`)
   process.exit(1)
