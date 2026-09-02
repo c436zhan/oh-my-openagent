@@ -241,10 +241,10 @@ function isErrno(error, code) {
 if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
     if (process.argv.includes("--check")) {
-      // Fresh-checkout-safe: if the aggregate ulw-loop bundle was never built locally (its dist is a
-      // gitignored build output), there is nothing to verify - CI covers the full build in its dedicated job.
-      if (!(await fileExists(defaultSourceEntry))) {
-        console.log(`runtime dist not built locally; skipping freshness check: ${defaultSourceEntry}`)
+      // Fresh-checkout-safe: the agent-toolkit target is a gitignored staged runtime. If the source
+      // bundle or target has not been generated locally, CI covers staging in the Senpi build job.
+      if (!(await fileExists(defaultSourceEntry)) || !(await fileExists(defaultTargetDir))) {
+        console.log(`agent-toolkit runtime not staged locally; skipping freshness check: ${defaultTargetDir}`)
       } else {
         const result = await checkAgentToolkitFresh()
         console.log(`Senpi agent-toolkit runtime is current: ${result.targetDir} sha256=${result.sha256}`)
