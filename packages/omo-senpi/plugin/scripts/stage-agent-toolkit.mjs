@@ -242,7 +242,7 @@ if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.a
   try {
     if (process.argv.includes("--check")) {
       // Fresh-checkout-safe: the agent-toolkit source and target are generated together by the Senpi
-      // build. A totally unstaged checkout can skip; a partial source/target state must fail below.
+      // build. A totally unstaged checkout can skip; a missing target is staged before validation.
       const sourceExists = await fileExists(defaultSourceEntry)
       const targetExists = await fileExists(defaultTargetDir)
       if (!sourceExists && !targetExists) {
@@ -250,8 +250,9 @@ if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.a
       } else if (!sourceExists) {
         throw new Error(`Senpi aggregate ulw-loop bundle is missing: ${defaultSourceEntry}`)
       } else if (!targetExists) {
-        throw new Error(`Senpi agent-toolkit runtime is missing: ${defaultTargetDir}`)
-      } else {
+        await stageAgentToolkit({ buildBundle: false })
+      }
+      if (sourceExists) {
         const result = await checkAgentToolkitFresh()
         console.log(`Senpi agent-toolkit runtime is current: ${result.targetDir} sha256=${result.sha256}`)
       }
