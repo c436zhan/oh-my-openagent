@@ -1,3 +1,4 @@
+# Regeneration for PR #6725 against the latest dev rebase.
 name: PR6725 Regenerate Senpi Bundle
 
 on:
@@ -15,21 +16,16 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: fix/doctor-config-summary
-
       - uses: actions/setup-node@v7
         with:
           node-version: "24"
-
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.4.4"
-
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
-
       - name: Regenerate Senpi main bundle
         run: node packages/omo-senpi/plugin/scripts/build-extension.mjs
-
       - name: Commit regenerated main bundle
         shell: bash
         run: |
@@ -41,5 +37,5 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: regenerate Senpi main bundle for doctor migration"
+          git commit -m "chore: regenerate Senpi main bundle for current dev"
           git push origin HEAD:fix/doctor-config-summary
